@@ -39,7 +39,7 @@ private:
 public:
 	Talia() {
 		int wartoœci[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-		string nazwy[] = { "Dwa", "Trzy", "Cztery", "Piec", "Szczesc", "Siedem", "Osiem", "Dziewiec", "Dziesiec", "Walet", "Krolowa", "Krol", "As" };
+		string nazwy[] = { "Dwa", "Trzy", "Cztery", "Piec", "Szesc", "Siedem", "Osiem", "Dziewiec", "Dziesiec", "Walet", "Krolowa", "Krol", "As" };
 		string kolory[] = { "Pik", "Trefl", "Karo", "Kier" };
 		for (int i = 0; i < 13; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -80,12 +80,12 @@ public:
 		}
 		return j;
 	}
-	string nazwy() {
-		string y;
-		for (int i = 0; i < reka.size(); i++) {
-			return reka[i].nazwakarty();
+	void nazwy() {
+		for (int i = 0; i < reka.size();i++) {
+			cout<<reka[i].nazwakarty()<<endl;
+		};
 		}
-	}
+		
 };
 
 class Klient {
@@ -98,12 +98,13 @@ public:
 		send(socket, wiadomosc.c_str(), size(wiadomosc), 0);
 	}
 	string odbstr() {
-		char odbior[5000];
-		recv(socket, odbior, 5000, 0);
-		return string(odbior);
+		char odbior[4096];
+		ZeroMemory(odbior, 4096);
+		recv(socket, odbior, size(odbior), 0);
+		return odbior;
 	}
 	void wyslint(int wartosc) {
-		send(socket, (char*)wartosc, sizeof(wartosc), 0);
+		send(socket, (char*)&wartosc, sizeof(wartosc), 0);
 	}
 	int odbint() {
 		int wartosc;
@@ -111,8 +112,7 @@ public:
 		return wartosc;
 	}
 	void wyslijkarte(Rêka reka) {
-		wyslstr(reka.nazwy());
-		wyslint(reka.pkt());
+		
 	}
 };
 
@@ -122,17 +122,38 @@ void gra(Klient *kl) {
 	talia.tasowanie();
 	Rêka klient;
 	Rêka serwer;
-	string opcja;
-
-	serwer.dodaj(talia.rozdaj());
-	klient.dodaj(talia.rozdaj());
-	serwer.dodaj(talia.rozdaj());
-	klient.dodaj(talia.rozdaj());
+ 
 	
-	kl->wyslijkarte(klient);
 
-	string odpowiedz = kl->odbstr();
-	cout << odpowiedz;
+		klient.dodaj(talia.rozdaj());	
+		serwer.dodaj(talia.rozdaj());
+		klient.dodaj(talia.rozdaj());
+		serwer.dodaj(talia.rozdaj());
+		serwer.nazwy();
+		klient.nazwy();
+
+		cout<<klient.suma()<<endl;
+		int sm=klient.suma();
+		sm = ntohl(sm);
+		kl->wyslint(sm);
+		sm = serwer.suma();
+		sm = ntohl(sm);
+		kl->wyslint(sm);
+
+		string odb = kl->odbstr();
+		cout << odb;
+
+		if (odb == "h") {
+
+		}
+		else if (odb == "s") {
+
+		}
+		
+
+
+		
+
 }
 int main() {
 
@@ -149,8 +170,6 @@ int main() {
 		if (Wynik != 0) {
 			cout << "Startup error";
 		}
-		else
-			cout << "Startup ok" << endl;
 
 		//Tworzenie socketu serwera
 
@@ -168,8 +187,7 @@ int main() {
 			cout << "getaddrinfo error";
 			WSACleanup();
 		}
-		else
-			cout << "getaddrinfo ok" << endl;
+
 
 		//Tworzenie socektu serwera do szukania po³¹czeñ klienta
 
@@ -179,8 +197,6 @@ int main() {
 			freeaddrinfo(result);
 			WSACleanup();
 		}
-		else
-			cout << "Socket ok" << endl;
 
 		//TCP listen socket
 
@@ -191,8 +207,6 @@ int main() {
 			closesocket(ListenSocket);
 			WSACleanup();
 		}
-		else
-			cout << "Binding ok" << endl;
 
 		freeaddrinfo(result);
 		//szukanie socketu
@@ -203,8 +217,6 @@ int main() {
 			closesocket(ListenSocket);
 			WSACleanup();
 		}
-		else
-			cout << "Listen ok" << endl;
 
 		//akceptowanie socketu klienta
 
@@ -215,9 +227,7 @@ int main() {
 			closesocket(ListenSocket);
 			WSACleanup();
 		}
-		else
-			cout << "Accept ok" << endl;
-		closesocket(ListenSocket);
+
 		//odbieranie i wysy³anie sygna³u
 
 
@@ -227,15 +237,12 @@ int main() {
 
 		// Wy³¹czanie serwera
 
-		Wynik = shutdown(ClientSocket, SD_SEND);
+		Wynik = shutdown(ClientSocket, SD_BOTH);
 		if (Wynik == SOCKET_ERROR) {
 			cout << "Shutdown error" << WSAGetLastError();
 			closesocket(ClientSocket);
 			WSACleanup();
 		}
-		else
-			cout << "zamykanie ok" << endl;
-
 		// Czyszczenie
 
 		closesocket(ClientSocket);
