@@ -122,7 +122,7 @@ void gra(Klient *kl) {
 	talia.tasowanie();
 	Rêka klient;
 	Rêka serwer;
- 
+	string odp;
 	
 
 		klient.dodaj(talia.rozdaj());	
@@ -144,9 +144,28 @@ void gra(Klient *kl) {
 		cout << odb;
 
 		if (odb == "h") {
+			klient.dodaj(talia.rozdaj());
+			cout << "Przeciwnik wykona³ ruch hit, jego nowa suma punktow: " << klient.suma() << endl;
+			cout << "Hit czy Stand (h/s)" << endl;
+			cin >> odp;
+			if (odp=="h") {
+				serwer.dodaj(talia.rozdaj());
+				if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
+					sm = klient.suma();
+					sm = ntohl(sm);
+					kl->wyslint(sm);
+					sm = serwer.suma();
+					sm = ntohl(sm);
+					kl->wyslint(sm);
+				}
+				else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
 
+				}
+			}
 		}
 		else if (odb == "s") {
+			cout << "Przeciwnik wykona³ ruch stand, jego suma punktow: " << klient.suma() << endl;
+			cout << "Hit czy Stand (h/s)" << endl;
 
 		}
 		
