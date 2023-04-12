@@ -122,7 +122,8 @@ void gra(Klient *kl) {
 	talia.tasowanie();
 	Rêka klient;
 	Rêka serwer;
-	string odp;
+	string odp, odp2;
+	string wynik = "gra";
 	
 
 		klient.dodaj(talia.rozdaj());	
@@ -142,33 +143,89 @@ void gra(Klient *kl) {
 
 		string odb = kl->odbstr();
 		cout << odb;
+		do {
+			if (odb == "h") {
+				klient.dodaj(talia.rozdaj());
+				if (klient.suma() < 22) {
+					cout << "Przeciwnik wykona³ ruch hit, jego nowa suma punktow: " << klient.suma() << endl;
+					cout << "Hit czy Stand (h/s)" << endl;
+					cin >> odp2;
+					if (odp2 == "h") {
+						serwer.dodaj(talia.rozdaj());
+						if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
 
-		if (odb == "h") {
-			klient.dodaj(talia.rozdaj());
-			cout << "Przeciwnik wykona³ ruch hit, jego nowa suma punktow: " << klient.suma() << endl;
-			cout << "Hit czy Stand (h/s)" << endl;
-			cin >> odp;
-			if (odp=="h") {
-				serwer.dodaj(talia.rozdaj());
-				if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
-					sm = klient.suma();
-					sm = ntohl(sm);
-					kl->wyslint(sm);
-					sm = serwer.suma();
-					sm = ntohl(sm);
-					kl->wyslint(sm);
-				}
-				else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
+						}
+						else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+						}
 
+					}
 				}
 			}
-		}
-		else if (odb == "s") {
-			cout << "Przeciwnik wykona³ ruch stand, jego suma punktow: " << klient.suma() << endl;
-			cout << "Hit czy Stand (h/s)" << endl;
+			else if (odb == "s") {
+				cout << "Przeciwnik wykona³ ruch stand, jego suma punktow: " << klient.suma() << endl;
+					cout << "Hit czy Stand (h/s)" << endl;
+					cin >> odp2;
+				if (odp2 == "h") {
+					serwer.dodaj(talia.rozdaj());
+					if (serwer.suma() < 22) {
+						sm = klient.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
+						sm = serwer.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
 
-		}
-		
+					}
+					else if (serwer.suma() > 21) {
+						sm = klient.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
+						sm = serwer.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
+					}
+				}
+				else if (odp2 == "s") {
+					if (serwer.suma() < 22 && klient.suma() < 22) {
+						if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							wynik = "koniec";
+							cout << "Wygrywa klient" << endl;
+						}
+						else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							cout << "Wygrywa serwer" << endl;
+							wynik = "koniec";
+						}
+						else if (serwer.suma() > 21 || klient.suma() > 21) {
+							
+						}
+					}
+				}
+			}
+		} while (wynik != "koniec");
 
 
 		
