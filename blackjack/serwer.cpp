@@ -133,7 +133,8 @@ void gra(Klient *kl) {
 		serwer.nazwy();
 		klient.nazwy();
 
-		cout<<klient.suma()<<endl;
+		cout<<"Suma twoich punktow: " << serwer.suma() << endl;
+		cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
 		int sm=klient.suma();
 		sm = ntohl(sm);
 		kl->wyslint(sm);
@@ -141,65 +142,108 @@ void gra(Klient *kl) {
 		sm = ntohl(sm);
 		kl->wyslint(sm);
 
-		string odb = kl->odbstr();
-		cout << odb;
+		
+	
 		do {
+			string odb = kl->odbstr();
 			if (odb == "h") {
 				klient.dodaj(talia.rozdaj());
 				if (klient.suma() < 22) {
-					cout << "Przeciwnik wykona³ ruch hit, jego nowa suma punktow: " << klient.suma() << endl;
+					cout << "Przeciwnik wykonal ruch hit, jego nowa suma punktow: " << klient.suma() << endl;
 					cout << "Hit czy Stand (h/s)" << endl;
 					cin >> odp2;
 					if (odp2 == "h") {
 						serwer.dodaj(talia.rozdaj());
-						if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
+						if (serwer.suma() > 21) {
+							kl->wyslstr("koniec");
 							sm = klient.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
 							sm = serwer.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
-
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+							cout << "Wygrywa klient" << endl;
+							wynik = "koniec";
+							kl->wyslstr("wygrana");
 						}
-						else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
+						else {
+							kl->wyslstr(odp2);
 							sm = klient.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
 							sm = serwer.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
 						}
-
 					}
+					else if (odp2 == "s") {
+						kl->wyslstr(odp2);
+						sm = klient.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
+						sm = serwer.suma();
+						sm = ntohl(sm);
+						kl->wyslint(sm);
+						cout << "Suma twoich punktow: " << serwer.suma() << endl;
+						cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+					}
+				}
+				else {
+					kl->wyslstr("koniec");
+					sm = klient.suma();
+					sm = ntohl(sm);
+					kl->wyslint(sm);
+					sm = serwer.suma();
+					sm = ntohl(sm);
+					kl->wyslint(sm);
+					cout << "Suma twoich punktow: " << serwer.suma() << endl;
+					cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+					cout << "Wygrywa serwer" << endl;
+					wynik = "koniec";
+					kl->wyslstr("przegrana");
 				}
 			}
 			else if (odb == "s") {
-				cout << "Przeciwnik wykona³ ruch stand, jego suma punktow: " << klient.suma() << endl;
+				cout << "Przeciwnik wykonal ruch stand, jego suma punktow: " << klient.suma() << endl;
 					cout << "Hit czy Stand (h/s)" << endl;
 					cin >> odp2;
 				if (odp2 == "h") {
 					serwer.dodaj(talia.rozdaj());
 					if (serwer.suma() < 22) {
+						kl->wyslstr(odp2);
 						sm = klient.suma();
 						sm = ntohl(sm);
 						kl->wyslint(sm);
 						sm = serwer.suma();
 						sm = ntohl(sm);
 						kl->wyslint(sm);
+						cout << "Suma twoich punktow: " << serwer.suma() << endl;
+						cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
 
 					}
 					else if (serwer.suma() > 21) {
+						kl->wyslstr("koniec");
 						sm = klient.suma();
 						sm = ntohl(sm);
 						kl->wyslint(sm);
 						sm = serwer.suma();
 						sm = ntohl(sm);
 						kl->wyslint(sm);
+						cout << "Suma twoich punktow: " << serwer.suma() << endl;
+						cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+						cout << "Wygrywa klient" << endl;
+						wynik = "koniec";
+						kl->wyslstr("wygrana");
 					}
 				}
 				else if (odp2 == "s") {
 					if (serwer.suma() < 22 && klient.suma() < 22) {
 						if (serwer.suma() < klient.suma() && klient.suma() <= 21) {
+							kl->wyslstr("koniec");
 							sm = klient.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
@@ -207,20 +251,63 @@ void gra(Klient *kl) {
 							sm = ntohl(sm);
 							kl->wyslint(sm);
 							wynik = "koniec";
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
 							cout << "Wygrywa klient" << endl;
+							kl->wyslstr("wygrana");
 						}
 						else if (serwer.suma() > klient.suma() && serwer.suma() <= 21) {
+							kl->wyslstr("koniec");
 							sm = klient.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
 							sm = serwer.suma();
 							sm = ntohl(sm);
 							kl->wyslint(sm);
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
 							cout << "Wygrywa serwer" << endl;
 							wynik = "koniec";
+							kl->wyslstr("przegrana");
 						}
-						else if (serwer.suma() > 21 || klient.suma() > 21) {
-							
+						else if (serwer.suma() > 21) {
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+							cout << "Wygrywa klient" << endl;
+							wynik = "koniec";
+							kl->wyslstr("koniec");
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslstr("wygrana");
+						}
+						else if (klient.suma() > 21) {
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+							cout << "Wygrywa serwer" << endl;
+							wynik = "koniec";
+							kl->wyslstr("koniec");
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslstr("przegrana");
+						}
+						else if (klient.suma() == serwer.suma()) {
+							cout << "Suma twoich punktow: " << serwer.suma() << endl;
+							cout << "Suma punktow przeciwnika: " << klient.suma() << endl;
+							cout << "remis" << endl;
+							wynik = "koniec";
+							kl->wyslstr("koniec");
+							sm = klient.suma();
+							sm = ntohl(sm);
+							kl->wyslint(sm);
+							sm = serwer.suma();
+							sm = ntohl(sm);
+							kl->wyslstr("remis");
 						}
 					}
 				}
