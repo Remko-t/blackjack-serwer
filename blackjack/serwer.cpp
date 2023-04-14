@@ -8,7 +8,6 @@
 #include <vector>
 #include <algorithm>
 
-
 using namespace std;
 using namespace sf;
 
@@ -58,6 +57,7 @@ public:
 		return Card;
 	}
 };
+
 class Rêka {
 private:
 	vector<Karta> reka;
@@ -315,6 +315,7 @@ void gra(Klient *kl) {
 		
 
 }
+
 int main() {
 
 		int Wynik, wyslijwynik;
@@ -387,6 +388,28 @@ int main() {
 			closesocket(ListenSocket);
 			WSACleanup();
 		}
+
+
+
+		sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+		Texture txt;
+		txt.loadFromFile("grafika/assehartowe.png");
+		Sprite spr(txt);
+
+		while (window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+			}
+
+			window.clear();
+			window.draw(spr);
+			window.display();
+		}
+
 
 		//odbieranie i wysy³anie sygna³u
 		bool kontynuacja = true;
