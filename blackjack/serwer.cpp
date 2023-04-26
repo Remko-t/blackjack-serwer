@@ -395,31 +395,41 @@ int main() {
 		//odbieranie i wysy³anie sygna³u
 		bool kontynuacja = true;
 		string odp, odp2;
+		Klient klient(ClientSocket);
+		gra(&klient);
 
 			do {
-				Klient klient(ClientSocket);
-				gra(&klient);
-				cout << "Chcesz zagrac jeszcze raz? (Tak/Nie) " << endl;
-				cin >> odp;
+				
+				do {
+					cout << "Chcesz zagrac jeszcze raz? (Tak/Nie) " << endl;
+					cin >> odp;
 
-				if (odp == "Tak") {
-					klient.wyslstr("Tak");
-					odp2 = klient.odbstr();
-					if (odp2 == "Tak") {
-						kontynuacja = true;
+					if (odp == "Tak") {
+						klient.wyslstr("Tak");
+						odp2 = klient.odbstr();
+						if (odp2 == "Tak") {
+							kontynuacja = true;
+							system("CLS");
+							Klient klient(ClientSocket);
+							gra(&klient);
+						}
+						else if (odp2 == "Nie") {
+							cout << "Przeciwnik nie chce grac ponownie";
+							kontynuacja = false;
+						}
+						else {
+							kontynuacja = false;
+						}
+					}
+					else if (odp == "Nie") {
+						kontynuacja = false;
+						klient.wyslstr("Nie");
 						system("CLS");
 					}
 					else {
-						cout << "Przeciwnik nie chce grac ponownie";
-						kontynuacja = false;
+						cout << "Zla odpowiedz" << endl;
 					}
-				}
-				else if (odp == "Nie") {
-					kontynuacja = false;
-					klient.wyslstr("Nie");
-					system("CLS");
-				}
-
+				} while (odp == "Tak" || odp == "Nie");
 			} while (kontynuacja);
 
 
